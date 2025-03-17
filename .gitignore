@@ -1,0 +1,4 @@
+.crm
+*.xlsx
+**/.git/
+gh-crm
