@@ -25,6 +25,6 @@ func CloneRepository(clonePath string, repoFullName string, ghExec GitHubExec) e
 		return nil // Success
 	}
 
-	fmt.Printf("Skip existing repo: %v use gh crm pull to get new commits\n", clonePath)
+	fmt.Printf("Skip existing repo: %s, use gh crm pull to get new commits\n", clonePath)
 	return fmt.Errorf("repository already exists: %s", clonePath)
 }

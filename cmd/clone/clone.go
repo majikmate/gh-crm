@@ -102,7 +102,7 @@ func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 			cloneErrors := []string{}
 
 			if assignment.StarterCodeRepository.Id != 0 {
-				starterPath := filepath.Join(assignmentPath, "_starter-repo")
+				starterPath := filepath.Join(assignmentPath, "aaa-starter-repo")
 				err = utils.CloneRepository(starterPath, assignment.StarterCodeRepository.FullName, gh.Exec)
 				if err != nil {
 					errMsg := fmt.Sprintf("Error cloning %s: %v", assignment.StarterCodeRepository.FullName, err)
