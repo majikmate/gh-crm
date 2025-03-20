@@ -45,6 +45,11 @@ func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 				crm.Fatal(err)
 			}
 
+			isClassroomFolder, err := crm.IsClassroomFolder()
+			if err != nil {
+				crm.Fatal(err)
+			}
+
 			if isAssignmentFolder, err = crm.IsAssignmentFolder(); err == nil && isAssignmentFolder {
 				a, err := crm.LoadAssignment()
 				if err != nil {
@@ -54,6 +59,10 @@ func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 			}
 			if err != nil {
 				crm.Fatal(err)
+			}
+
+			if !isClassroomFolder && !isAssignmentFolder {
+				crm.Fatal("No classroom or assignment found. `gh crm clone` should either be run from within a classroom folder or from within an assignment folder. Run `gh crm init` to initialize a classroom folder or change to an initialized classroom folder.")
 			}
 
 			if aId == 0 {

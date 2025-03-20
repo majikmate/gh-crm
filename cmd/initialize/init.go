@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/MakeNowJust/heredoc"
@@ -39,14 +40,29 @@ func NewCmdInit(f *cmdutil.Factory) *cobra.Command {
 				crm.Fatal(fmt.Errorf("failed to create gh client: %v", err))
 			}
 
-			if cId == 0 {
-				c, err := shared.PromptForClassroom(client)
-				if err != nil {
-					crm.Fatal(fmt.Errorf("failed to get classroom: %v", err))
-				}
+			c, err := crm.LoadClassroom()
+			if err != nil {
+				if errors.Is(err, crm.ClassroomNotFound) {
+					c, err := shared.PromptForClassroom(client)
+					if err != nil {
+						crm.Fatal(fmt.Errorf("failed to get classroom: %v", err))
+					}
 
-				cId = c.Id
+					cId = c.Id
+				} else {
+					crm.Fatal(err)
+				}
+			} else {
+				isClassroomFolder, err := crm.IsClassroomFolder()
+				if err != nil {
+					crm.Fatal(err)
+				} else if !isClassroomFolder {
+					crm.Fatal(fmt.Errorf("Classroom folder exists in the folder hierarchy above, but the current folder is not a classroom folder. Change to the classroom folder."))
+				} else {
+					cId = c.Classroom.Id
+				}
 			}
+
 			cls, err := classroom.GetClassroom(client, cId)
 			if err != nil {
 				crm.Fatal(fmt.Errorf("failed to get classroom: %v", err))
@@ -57,7 +73,7 @@ func NewCmdInit(f *cmdutil.Factory) *cobra.Command {
 				crm.Fatal(fmt.Errorf("failed to read accounts: %v", err))
 			}
 
-			c := crm.NewClassroom()
+			c = crm.NewClassroom()
 			c.SetOrganization(cls.Organization.Id, cls.Organization.Login)
 			c.SetClassroom(cls.Id, cls.Name)
 			for _, a := range as {

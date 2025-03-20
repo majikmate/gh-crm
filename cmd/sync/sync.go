@@ -1,6 +1,7 @@
 package sync
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/MakeNowJust/heredoc"
@@ -13,7 +14,6 @@ import (
 
 func NewCmdSync(f *cmdutil.Factory) *cobra.Command {
 	var aId int
-	var isAssignmentFolder bool
 	var verbose bool
 
 	cmd := &cobra.Command{
@@ -44,23 +44,19 @@ func NewCmdSync(f *cmdutil.Factory) *cobra.Command {
 				crm.Fatal(err)
 			}
 
-			if isAssignmentFolder, err = crm.IsAssignmentFolder(); err == nil && isAssignmentFolder {
-				a, err := crm.LoadAssignment()
-				if err != nil {
-					crm.Fatal(err)
-				}
-				aId = a.Id
-			}
+			a, err := crm.LoadAssignment()
 			if err != nil {
-				crm.Fatal(err)
-			}
+				if errors.Is(err, crm.AssignmentNotFound) {
+					a, err := shared.PromptForAssignment(client, c.Classroom.Id)
+					if err != nil {
+						crm.Fatal(err)
+					}
 
-			if aId == 0 {
-				a, err := shared.PromptForAssignment(client, c.Classroom.Id)
-				if err != nil {
+					aId = a.Id
+				} else {
 					crm.Fatal(err)
 				}
-
+			} else {
 				aId = a.Id
 			}
 

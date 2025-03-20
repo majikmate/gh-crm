@@ -2,6 +2,7 @@ package crm
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -41,6 +42,24 @@ type crm struct {
 	Students     []student
 }
 
+var (
+	ClassroomNotFound = errors.New("No classroom found. Run `gh crm init` to create a classroom or change to a classroom folder.")
+)
+
+func IsClassroomFolder() (bool, error) {
+	currentDir, err := os.Getwd()
+	if err != nil {
+		return false, fmt.Errorf("failed to get current directory: %v", err)
+	}
+
+	p := filepath.Join(currentDir, crmFolder, classroomFile)
+	if _, err := os.Stat(p); os.IsNotExist(err) {
+		return false, nil
+	}
+
+	return true, nil
+}
+
 func NewClassroom() *crm {
 	return &crm{}
 }
@@ -60,7 +79,7 @@ func LoadClassroom() (*crm, error) {
 
 		parentDir := filepath.Dir(currentDir)
 		if parentDir == currentDir {
-			return nil, fmt.Errorf("No classroom found. Run `gh crm init` to create a classroom.")
+			return nil, ClassroomNotFound
 		}
 
 		currentDir = parentDir

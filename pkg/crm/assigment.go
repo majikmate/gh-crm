@@ -2,6 +2,7 @@ package crm
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -12,6 +13,10 @@ type assignment struct {
 	Id   int
 	Name string
 }
+
+var (
+	AssignmentNotFound = errors.New("No assigment found. Run `gh crm clone` to clone an assignment or change to a folder that contains an assignment.")
+)
 
 func IsAssignmentFolder() (bool, error) {
 	currentDir, err := os.Getwd()
@@ -37,9 +42,19 @@ func LoadAssignment() (*assignment, error) {
 		return nil, fmt.Errorf("failed to get current directory: %v", err)
 	}
 
-	p := filepath.Join(currentDir, crmFolder, assigmentFile)
-	if _, err := os.Stat(p); os.IsNotExist(err) {
-		return nil, fmt.Errorf("No assigment found. Run `gh crm clone` to clone an assignment or chnage to a folder that contains an assignment.")
+	var p string
+	for {
+		p = filepath.Join(currentDir, crmFolder, assigmentFile)
+		if _, err := os.Stat(p); err == nil {
+			break
+		}
+
+		parentDir := filepath.Dir(currentDir)
+		if parentDir == currentDir {
+			return nil, AssignmentNotFound
+		}
+
+		currentDir = parentDir
 	}
 
 	f, err := os.Open(p)
