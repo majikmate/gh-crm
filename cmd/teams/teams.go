@@ -31,12 +31,6 @@ func NewCmdTeams(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "teams",
 		Example: `$ gh crm teams`,
-		Short:   "Initialize the local repository for GitHub Classroom",
-		Long: `Initialize the local repository for GitHub Classroom using an Accounts*.xlsx file in the current directory.
-The Accounts*.xlsx file should contain the following columns:
-- Name
-- Email
-- GitHub User Name`,
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := gh.RESTClient(nil)
 
