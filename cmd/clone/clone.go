@@ -9,6 +9,7 @@ import (
 	"github.com/cli/cli/v2/pkg/cmdutil"
 	"github.com/cli/go-gh"
 	"github.com/github/gh-classroom/cmd/gh-classroom/shared"
+	"github.com/github/gh-classroom/pkg/classroom"
 	"github.com/scalarion/gh-crm/cmd/clone/utils"
 	"github.com/scalarion/gh-crm/pkg/crm"
 	"github.com/spf13/cobra"
@@ -58,12 +59,11 @@ func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 				aId = a.Id
 			}
 
-			acceptedAssignmentList, err := shared.ListAllAcceptedAssignments(client, aId, 15)
+			assignment, err := classroom.GetAssignment(client, aId)
 			if err != nil {
 				crm.Fatal(err)
 			}
 
-			assignment := acceptedAssignmentList.Assignment
 			var assignmentPath string
 			if isAssignmentFolder {
 				assignmentPath, err = os.Getwd()
@@ -94,6 +94,20 @@ func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 
 			totalCloned := 0
 			cloneErrors := []string{}
+
+			starterPath := filepath.Join(assignmentPath, "_"+assignment.Slug)
+			err = utils.CloneRepository(starterPath, assignment.StarterCodeRepository.FullName, gh.Exec)
+			if err != nil {
+				errMsg := fmt.Sprintf("Error cloning %s: %v", assignment.StarterCodeRepository.FullName, err)
+				cloneErrors = append(cloneErrors, errMsg)
+			}
+			totalCloned++
+
+			acceptedAssignmentList, err := shared.ListAllAcceptedAssignments(client, aId, 15)
+			if err != nil {
+				crm.Fatal(err)
+			}
+
 			for _, acceptedAssignment := range acceptedAssignmentList.AcceptedAssignments {
 				repoName := acceptedAssignment.Repository.Name
 				if len(acceptedAssignment.Students) == 1 {

@@ -39,7 +39,7 @@ func LoadAssignment() (*assignment, error) {
 
 	p := filepath.Join(currentDir, crmFolder, assigmentFile)
 	if _, err := os.Stat(p); os.IsNotExist(err) {
-		return nil, fmt.Errorf("No assigment found. Run `gh crm clone` to clone an assignment.")
+		return nil, fmt.Errorf("No assigment found. Run `gh crm clone` to clone an assignment or chnage to a folder that contains an assignment.")
 	}
 
 	f, err := os.Open(p)

@@ -14,7 +14,7 @@
             // "cwd": "${workspaceFolder}/singleton-part-3",
             "cwd": "${workspaceFolder}",
             "args": [
-                "init",
+                "clone",
             ],
         }
     ]
