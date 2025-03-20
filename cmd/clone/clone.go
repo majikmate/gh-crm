@@ -22,12 +22,18 @@ func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "clone",
-		Short: "Clone student repos for an assignment",
-		Long: heredoc.Doc(`Clone student repos for an assignment.
+		Short: "Clones starter repo and student repos for an assignment",
+		Long: heredoc.Doc(`
+		
+			Clones the starter repo and the student repos for an assignment.
 
-		The student repos are cloned into the current directory in a directory named after the assignment. 
-		If the directory does not exists, it will be created.
-		`),
+			The repos are cloned into the current directory in a directory named after the
+			assignment.
+
+			If the student repos are individual assignements the cloned directories will be
+			named after the student email address as lastname.firstname. If the student repos 
+			are group assignments the cloned directories will be named after the repo name.`),
+		Example: `$ gh crm clone`,
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := gh.RESTClient(nil)
 			if err != nil {
@@ -96,7 +102,7 @@ func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 			cloneErrors := []string{}
 
 			if assignment.StarterCodeRepository.Id != 0 {
-				starterPath := filepath.Join(assignmentPath, "_"+assignment.Slug)
+				starterPath := filepath.Join(assignmentPath, "_starter-repo")
 				err = utils.CloneRepository(starterPath, assignment.StarterCodeRepository.FullName, gh.Exec)
 				if err != nil {
 					errMsg := fmt.Sprintf("Error cloning %s: %v", assignment.StarterCodeRepository.FullName, err)

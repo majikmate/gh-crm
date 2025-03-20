@@ -2,31 +2,37 @@ package sync
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 
 	"github.com/MakeNowJust/heredoc"
 	"github.com/cli/cli/v2/pkg/cmdutil"
 	"github.com/cli/go-gh"
 	"github.com/github/gh-classroom/cmd/gh-classroom/shared"
-	"github.com/scalarion/gh-crm/cmd/clone/utils"
 	"github.com/scalarion/gh-crm/pkg/crm"
 	"github.com/spf13/cobra"
 )
 
-func NewCmdSyncs(f *cmdutil.Factory) *cobra.Command {
+func NewCmdSync(f *cmdutil.Factory) *cobra.Command {
 	var aId int
 	var isAssignmentFolder bool
 	var verbose bool
 
 	cmd := &cobra.Command{
-		Use:   "clone",
-		Short: "Clone student repos for an assignment",
-		Long: heredoc.Doc(`Clone student repos for an assignment.
+		Use:   "sync",
+		Short: "Synchronizes student repos for an assignment with the starter repo",
+		Long: heredoc.Doc(`
+		
+			Synchronizes student repos for an assignment with the starter repo they are
+			forked from on GitHub.
 
-		The student repos are cloned into the current directory in a directory named after the assignment. 
-		If the directory does not exists, it will be created.
-		`),
+			As a result, students can pull in updated code from the starter repo to their
+			local repositories. This is most useful when the starter repo is updated with, 
+			e.g., example code that shall be distributed to the students.
+			
+			The command can be run within the folder of an assignment, in which case the
+			assignment-id is automatically detected. If the assigment-id is known, it can 
+			be passed as an argument. Otherwise, the user will be prompted to 
+			select a classroom.`),
+		Example: `$ gh crm sync`,
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := gh.RESTClient(nil)
 			if err != nil {
@@ -63,37 +69,8 @@ func NewCmdSyncs(f *cmdutil.Factory) *cobra.Command {
 				crm.Fatal(err)
 			}
 
-			assignment := acceptedAssignmentList.Assignment
-			var assignmentPath string
-			if isAssignmentFolder {
-				assignmentPath, err = os.Getwd()
-			} else {
-				assignmentPath, err = filepath.Abs(assignment.Slug)
-			}
-			if err != nil {
-				fmt.Println("Error getting absolute path for directory: ", err)
-				return
-			}
-
-			if !isAssignmentFolder {
-				if _, err := os.Stat(assignmentPath); os.IsNotExist(err) {
-					fmt.Println("Creating directory: ", assignmentPath)
-					err = os.MkdirAll(assignmentPath, 0755)
-					if err != nil {
-						crm.Fatal(err)
-					}
-				}
-
-				a := crm.NewAssignment()
-				a.Set(assignment.Id, assignment.Slug)
-				err = a.Save(assignmentPath)
-				if err != nil {
-					crm.Fatal(err)
-				}
-			}
-
-			totalCloned := 0
-			cloneErrors := []string{}
+			totalSyched := 0
+			syncErrors := []string{}
 			for _, acceptedAssignment := range acceptedAssignmentList.AcceptedAssignments {
 				repoName := acceptedAssignment.Repository.Name
 				if len(acceptedAssignment.Students) == 1 {
@@ -101,26 +78,27 @@ func NewCmdSyncs(f *cmdutil.Factory) *cobra.Command {
 						repoName = name
 					}
 				}
-				clonePath := filepath.Join(assignmentPath, repoName)
-				err := utils.CloneRepository(clonePath, acceptedAssignment.Repository.FullName, gh.Exec)
+				_, _, err := gh.Exec("repo", "sync", acceptedAssignment.Repository.FullName)
 				if err != nil {
-					errMsg := fmt.Sprintf("Error cloning %s: %v", acceptedAssignment.Repository.FullName, err)
-					cloneErrors = append(cloneErrors, errMsg)
-					continue // Continue with the next iteration
+					//Don't bail on an error the repo could have changes preventing
+					//a pull, continue with rest of repos
+					fmt.Println(err)
+					continue
 				}
-				totalCloned++
+				fmt.Printf("Synchronized: %s (%s)\n", repoName, acceptedAssignment.Repository.FullName)
+				totalSyched++
 			}
-			if len(cloneErrors) > 0 {
-				fmt.Println("Some repositories failed to clone.")
+			if len(syncErrors) > 0 {
+				fmt.Println("Some repositories failed to sync.")
 				if !verbose {
 					fmt.Println("Run with --verbose flag to see more details")
 				} else {
-					for _, errMsg := range cloneErrors {
+					for _, errMsg := range syncErrors {
 						fmt.Println(errMsg)
 					}
 				}
 			}
-			fmt.Printf("Cloned %v repos.\n", totalCloned)
+			fmt.Printf("Synched %v repos.\n", totalSyched)
 		},
 	}
 

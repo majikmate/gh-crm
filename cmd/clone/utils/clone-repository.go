@@ -16,7 +16,7 @@ type GitHubExec func(args ...string) (stdout, stderr bytes.Buffer, err error)
 // It returns an error if the cloning process fails.
 func CloneRepository(clonePath string, repoFullName string, ghExec GitHubExec) error {
 	if _, err := os.Stat(clonePath); os.IsNotExist(err) {
-		fmt.Printf("Cloning into: %v\n", clonePath)
+		fmt.Printf("Cloning into: %s (%s)\n", clonePath, repoFullName)
 		_, _, err := ghExec("repo", "clone", repoFullName, "--", clonePath)
 		if err != nil {
 			return fmt.Errorf("error cloning %s: %v", repoFullName, err)

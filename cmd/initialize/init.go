@@ -3,6 +3,7 @@ package initialize
 import (
 	"fmt"
 
+	"github.com/MakeNowJust/heredoc"
 	"github.com/cli/cli/v2/pkg/cmdutil"
 	"github.com/cli/go-gh"
 	"github.com/github/gh-classroom/cmd/gh-classroom/shared"
@@ -15,14 +16,23 @@ func NewCmdInit(f *cmdutil.Factory) *cobra.Command {
 	var cId int
 
 	cmd := &cobra.Command{
-		Use:     "init",
+		Use:   "init",
+		Short: "Initializes the local repository for GitHub Classroom",
+		Long: heredoc.Doc(`
+		
+			Initializes the local repository for GitHub Classroom using a list of accounts.
+
+			The accounts are read from an Excel file in the current directory that matches 
+			the filename pattern [Aa]ccounts*.xlsx. It must contain a header in the first 
+			row with following fields:
+
+			- Name         ... Full name of the student
+			- Email        ... Email address of the student
+			- GitHub User  ... GitHub username of the student
+
+			If the classroom-id is known, it can be passed as an argument. Otherwise, the 
+			user will be prompted to select a classroom.`),
 		Example: `$ gh crm init`,
-		Short:   "Initialize the local repository for GitHub Classroom",
-		Long: `Initialize the local repository for GitHub Classroom using an "Accounts*.xlsx" file in the current directory.
-		The "Accounts*.xlsx" file should contain the following columns:
-		- Name
-		- Email
-		- GitHub User`,
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := gh.RESTClient(nil)
 			if err != nil {
@@ -32,14 +42,14 @@ func NewCmdInit(f *cmdutil.Factory) *cobra.Command {
 			if cId == 0 {
 				c, err := shared.PromptForClassroom(client)
 				if err != nil {
-					crm.Fatal(fmt.Errorf("failed get classroom: %v", err))
+					crm.Fatal(fmt.Errorf("failed to get classroom: %v", err))
 				}
 
 				cId = c.Id
 			}
 			cls, err := classroom.GetClassroom(client, cId)
 			if err != nil {
-				crm.Fatal(fmt.Errorf("failed get classroom: %v", err))
+				crm.Fatal(fmt.Errorf("failed to get classroom: %v", err))
 			}
 
 			as, err := crm.ReadAccounts()
