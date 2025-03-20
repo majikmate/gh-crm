@@ -95,13 +95,15 @@ func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 			totalCloned := 0
 			cloneErrors := []string{}
 
-			starterPath := filepath.Join(assignmentPath, "_"+assignment.Slug)
-			err = utils.CloneRepository(starterPath, assignment.StarterCodeRepository.FullName, gh.Exec)
-			if err != nil {
-				errMsg := fmt.Sprintf("Error cloning %s: %v", assignment.StarterCodeRepository.FullName, err)
-				cloneErrors = append(cloneErrors, errMsg)
+			if assignment.StarterCodeRepository.Id != 0 {
+				starterPath := filepath.Join(assignmentPath, "_"+assignment.Slug)
+				err = utils.CloneRepository(starterPath, assignment.StarterCodeRepository.FullName, gh.Exec)
+				if err != nil {
+					errMsg := fmt.Sprintf("Error cloning %s: %v", assignment.StarterCodeRepository.FullName, err)
+					cloneErrors = append(cloneErrors, errMsg)
+				}
+				totalCloned++
 			}
-			totalCloned++
 
 			acceptedAssignmentList, err := shared.ListAllAcceptedAssignments(client, aId, 15)
 			if err != nil {
