@@ -17,6 +17,7 @@ import (
 
 func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 	var aId int
+	var starterFolder string
 	var isAssignmentFolder bool
 	var verbose bool
 
@@ -32,7 +33,9 @@ func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 
 			If the student repos are individual assignements the cloned directories will be
 			named after the student email address as lastname.firstname. If the student repos 
-			are group assignments the cloned directories will be named after the repo name.`),
+			are group assignments the cloned directories will be named after the repo name.
+			
+			The starter repo is cloned into a directory named ".main"`),
 		Example: `$ gh crm clone`,
 		Run: func(cmd *cobra.Command, args []string) {
 			client, err := gh.RESTClient(nil)
@@ -111,7 +114,10 @@ func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 			cloneErrors := []string{}
 
 			if assignment.StarterCodeRepository.Id != 0 {
-				starterPath := filepath.Join(assignmentPath, "aaa-starter-repo")
+				if starterFolder == "" {
+					starterFolder = ".main"
+				}
+				starterPath := filepath.Join(assignmentPath, starterFolder)
 				err = utils.CloneRepository(starterPath, assignment.StarterCodeRepository.FullName, gh.Exec)
 				if err != nil {
 					errMsg := fmt.Sprintf("Error cloning %s: %v", assignment.StarterCodeRepository.FullName, err)
@@ -156,6 +162,7 @@ func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().IntVarP(&aId, "assignment-id", "a", 0, "ID of the assignment")
+	cmd.Flags().StringVarP(&starterFolder, "starter-folder", "s", "", "name of the folder the starter code shall be cloned to")
 	cmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose error output")
 
 	return cmd
