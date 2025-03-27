@@ -105,7 +105,7 @@ func getAuthRec() (azidentity.AuthenticationRecord, error) {
 	if err == nil {
 		err = json.Unmarshal(b, &record)
 	}
-	return record, nil
+	return record, err
 }
 
 func putAuthRec(record azidentity.AuthenticationRecord) error {

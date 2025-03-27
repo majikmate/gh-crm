@@ -128,7 +128,7 @@ func (c *crm) AddStudent(name, email, githubUser string) {
 }
 
 func (c *crm) GetRepoName(githubUser string) (string, error) {
-	for _, s := range *&c.Students {
+	for _, s := range c.Students {
 		if s.GithubUser == githubUser {
 			return s.RepoName(), nil
 		}
