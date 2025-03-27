@@ -1,4 +1,5 @@
-name: Tests
+name: test
+description: run tests on all pushes and pull requests
 on: [push, pull_request]
 
 permissions:
@@ -13,15 +14,15 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Set up Go 1.22
+      - name: setup go
         uses: actions/setup-go@v5
         with:
-          go-version: 1.22
+          go-version-file: go.mod
 
-      - name: Check out code
+      - name: checkout code
         uses: actions/checkout@v4
 
-      - name: Restore Go modules cache
+      - name: restore go modules cache
         uses: actions/cache@v4
         with:
           path: ~/go/pkg/mod
@@ -29,11 +30,11 @@ jobs:
           restore-keys: |
             go-${{ runner.os }}-
 
-      - name: Download dependencies
+      - name: download dependencies
         run: go mod download
 
-      # - name: Run tests
+      # - name: run tests
       #   run: go test -race ./...
 
-      - name: Build
+      - name: build
         run: go build -v .
