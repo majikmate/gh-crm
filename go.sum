@@ -16,7 +16,6 @@ github.com/Netflix/go-expect v0.0.0-20220104043353-73e0943537d2 h1:+vx7roKuyA63n
 github.com/Netflix/go-expect v0.0.0-20220104043353-73e0943537d2/go.mod h1:HBCaDeC1lPdgDeDbhX8XFpy1jqjK0IBG8W5K+xYqA0w=
 github.com/alecthomas/assert/v2 v2.11.0 h1:2Q9r3ki8+JYXvGsDyBXwH3LcJ+WK5D0gc5E8vS6K3D0=
 github.com/alecthomas/assert/v2 v2.11.0/go.mod h1:Bze95FyfUr7x34QZrjL+XP+0qgp/zg8yS+TtBj1WA3k=
-github.com/alecthomas/chroma v0.10.0 h1:7XDcGkCQopCNKjZHfYrNLraA+M7e0fMiJ/Mfikbfjek=
 github.com/alecthomas/chroma/v2 v2.15.0 h1:LxXTQHFoYrstG2nnV9y2X5O94sOBzf0CIUpSTbpxvMc=
 github.com/alecthomas/chroma/v2 v2.15.0/go.mod h1:gUhVLrPDXPtp/f+L1jo9xepo9gL4eLwRuGAunSZMkio=
 github.com/alecthomas/repr v0.4.0 h1:GhI2A8MACjfegCPVq9f1FLvIBS+DrQ2KQBFZP1iFzXc=
@@ -45,7 +44,6 @@ github.com/charmbracelet/x/term v0.2.1 h1:AQeHeLZ1OqSXhrAWpYUtZyX1T3zVxfpZuEQMIQ
 github.com/charmbracelet/x/term v0.2.1/go.mod h1:oQ4enTYFV7QN4m0i9mzHrViD7TQKvNEEkHUMCmsxdUg=
 github.com/cli/browser v1.3.0 h1:LejqCrpWr+1pRqmEPDGnTZOjsMe7sehifLynZJuqJpo=
 github.com/cli/browser v1.3.0/go.mod h1:HH8s+fOAxjhQoBUAsKuPCbqUuxZDhQ2/aD+SzsEfBTk=
-github.com/cli/cli v1.14.0 h1:M8nedDWQMOR0O5fqPe0jzB8QkmoNoUikVmudxKSlzw8=
 github.com/cli/cli/v2 v2.69.0 h1:LepVSqlWN1K/BMk1zw1vyrfBnwH+1IlRtaKjAoyOZQI=
 github.com/cli/cli/v2 v2.69.0/go.mod h1:hr92HGcW2Q88V4h49HHKXHOlqKAffjMGVRv9jFF+wMM=
 github.com/cli/go-gh v1.2.1 h1:xFrjejSsgPiwXFP6VYynKWwxLQcNJy3Twbu82ZDlR/o=
