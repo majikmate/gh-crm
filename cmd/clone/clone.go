@@ -7,7 +7,8 @@ import (
 
 	"github.com/MakeNowJust/heredoc"
 	"github.com/cli/cli/v2/pkg/cmdutil"
-	"github.com/cli/go-gh"
+	"github.com/cli/go-gh/v2"
+	"github.com/cli/go-gh/v2/pkg/api"
 	"github.com/github/gh-classroom/cmd/gh-classroom/shared"
 	"github.com/github/gh-classroom/pkg/classroom"
 	"github.com/scalarion/gh-crm/cmd/clone/utils"
@@ -38,7 +39,7 @@ func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 			The starter repo is cloned into a directory named ".main"`),
 		Example: `$ gh crm clone`,
 		Run: func(cmd *cobra.Command, args []string) {
-			client, err := gh.RESTClient(nil)
+			client, err := api.DefaultRESTClient()
 			if err != nil {
 				crm.Fatal(err)
 			}
@@ -122,8 +123,9 @@ func NewCmdClone(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					errMsg := fmt.Sprintf("Error cloning %s: %v", assignment.StarterCodeRepository.FullName, err)
 					cloneErrors = append(cloneErrors, errMsg)
+				} else {
+					totalCloned++
 				}
-				totalCloned++
 			}
 
 			acceptedAssignmentList, err := shared.ListAllAcceptedAssignments(client, aId, 15)

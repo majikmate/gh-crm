@@ -6,7 +6,8 @@ import (
 
 	"github.com/MakeNowJust/heredoc"
 	"github.com/cli/cli/v2/pkg/cmdutil"
-	"github.com/cli/go-gh"
+	"github.com/cli/go-gh/v2"
+	"github.com/cli/go-gh/v2/pkg/api"
 	"github.com/github/gh-classroom/cmd/gh-classroom/shared"
 	"github.com/scalarion/gh-crm/pkg/crm"
 	"github.com/spf13/cobra"
@@ -34,7 +35,7 @@ func NewCmdSync(f *cmdutil.Factory) *cobra.Command {
 			select a classroom.`),
 		Example: `$ gh crm sync`,
 		Run: func(cmd *cobra.Command, args []string) {
-			client, err := gh.RESTClient(nil)
+			client, err := api.DefaultRESTClient()
 			if err != nil {
 				crm.Fatal(err)
 			}
