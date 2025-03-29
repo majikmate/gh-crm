@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/cli/cli/v2/pkg/cmd/factory"
-	"github.com/scalarion/gh-crm/cmd/root"
+	"github.com/majikmate/gh-crm/cmd/root"
 )
 
 func main() {

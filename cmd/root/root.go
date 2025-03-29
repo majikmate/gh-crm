@@ -2,9 +2,9 @@ package root
 
 import (
 	"github.com/cli/cli/v2/pkg/cmdutil"
-	"github.com/scalarion/gh-crm/cmd/clone"
-	"github.com/scalarion/gh-crm/cmd/initialize"
-	"github.com/scalarion/gh-crm/cmd/sync"
+	"github.com/majikmate/gh-crm/cmd/clone"
+	"github.com/majikmate/gh-crm/cmd/initialize"
+	"github.com/majikmate/gh-crm/cmd/sync"
 	"github.com/spf13/cobra"
 )
 

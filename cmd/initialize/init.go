@@ -9,7 +9,7 @@ import (
 	"github.com/cli/go-gh/v2/pkg/api"
 	"github.com/github/gh-classroom/cmd/gh-classroom/shared"
 	"github.com/github/gh-classroom/pkg/classroom"
-	"github.com/scalarion/gh-crm/pkg/crm"
+	"github.com/majikmate/gh-crm/pkg/crm"
 	"github.com/spf13/cobra"
 )
 

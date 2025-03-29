@@ -1,4 +1,4 @@
-module github.com/scalarion/gh-crm
+module github.com/majikmate/gh-crm
 
 go 1.23.6
 
