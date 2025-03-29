@@ -11,7 +11,7 @@ import (
 func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "crm <command>",
-		Short: "An opinionated GitHub Classroom CLI",
+		Short: "\nAn opinionated GitHub Classroom CLI",
 	}
 
 	cmd.AddCommand(initialize.NewCmdInit(f))
