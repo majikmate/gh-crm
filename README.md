@@ -1,6 +1,6 @@
 # An Opinionated GitHub Classroom CLI
 
-This extension is an opinionated GitHub Classroom extension for GitHub CLI to easily work with GitHub Classrooms and student repos. Its main purpose is to clone GitHub Classroom assignment and the starter repo as well as to synch back changes from the starter repo to the student repos.
+This extension is an opinionated [GitHub Classroom](https://classroom.github.com) extension for GitHub CLI to easily work with GitHub Classrooms and student repos. Its main purpose is to clone GitHub Classroom assignment and the starter repo as well as to synch back changes from the starter repo to the student repos.
 
 # Installation
 - Install the gh cli
@@ -57,7 +57,7 @@ See [CODEOWNERS](./CODEOWNERS)
 
 ## Attribution and Thanks
 
-This extension was heavily inspired by the great original GitHub Classroom CLI available here:
+This extension is heavily inspired by the great original GitHub Classroom CLI available here:
 
 - [GitHub Classroom CLI](https://github.com/github/gh-classroom)
 
