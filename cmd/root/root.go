@@ -11,11 +11,10 @@ import (
 func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "crm <command>",
-		Short: "A GitHub Classroom CLI",
+		Short: "An Opinionated GitHub Classroom CLI",
 	}
 
 	cmd.AddCommand(initialize.NewCmdInit(f))
-	// cmd.AddCommand(teams.NewCmdTeams(f))
 	cmd.AddCommand(clone.NewCmdClone(f))
 	cmd.AddCommand(sync.NewCmdSync(f))
 
