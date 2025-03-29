@@ -33,8 +33,8 @@ jobs:
       - name: download dependencies
         run: go mod download
 
-      # - name: run tests
-      #   run: go test -race ./...
+      - name: run tests
+        run: go test -race ./...
 
       - name: build
         run: go build -v .
