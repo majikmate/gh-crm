@@ -26,14 +26,14 @@ This extension is an opinionated [GitHub Classroom](https://classroom.github.com
 In order to start with the tool and initialize a classroom repository on the local file system, an Excel file containing a list of students with additional metadata is required in the local folder that should become the root of the local classroom repository.
 
 The Excel file needs to contain a header line in the first row containing following fields:
-			- Name         ... Full name of the student
-			- Email        ... Email address of the student
-			- GitHub User  ... GitHub username of the student
+- Name         ... Full name of the student
+- Email        ... Email address of the student
+- GitHub User  ... GitHub username of the student
 
 The additional lines need to contain at least one line with the respective student information.
 
 The Email should contain Emails of the students in the format
-      - *firstname*.*lastname*@domain.tld
+- *firstname*.*lastname*@domain.tld
 
 The Excel file must be named with a prefix of *account* or *Account* and should have the file extension *.xlsx*. This file can be created, e.g., by gathering student details through a [Microsoft Office Forms](http://forms.office.com/) form and exporting the responses.
 
