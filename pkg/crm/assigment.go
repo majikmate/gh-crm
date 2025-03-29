@@ -15,7 +15,7 @@ type assignment struct {
 }
 
 var (
-	AssignmentNotFound = errors.New("No assigment found. Run `gh crm clone` to clone an assignment or change to a folder that contains an assignment.")
+	ErrAssignmentNotFound = errors.New("no assigment found: run `gh crm clone` to clone an assignment or change to a folder that contains an assignment")
 )
 
 func IsAssignmentFolder() (bool, error) {
@@ -51,7 +51,7 @@ func LoadAssignment() (*assignment, error) {
 
 		parentDir := filepath.Dir(currentDir)
 		if parentDir == currentDir {
-			return nil, AssignmentNotFound
+			return nil, ErrAssignmentNotFound
 		}
 
 		currentDir = parentDir
@@ -61,7 +61,7 @@ func LoadAssignment() (*assignment, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to open %s file: %v", p, err)
 	}
-	defer f.Close()
+	defer f.Close() //nolint:errcheck
 
 	j, err := io.ReadAll(f)
 	if err != nil {
@@ -114,7 +114,7 @@ func (a *assignment) Save(path string) error {
 	if err != nil {
 		return fmt.Errorf("failed to create %s file: %v", p, err)
 	}
-	defer file.Close()
+	defer file.Close() //nolint:errcheck
 
 	_, err = file.Write(j)
 	if err != nil {

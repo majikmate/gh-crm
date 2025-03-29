@@ -47,7 +47,7 @@ func NewCmdSync(f *cmdutil.Factory) *cobra.Command {
 
 			a, err := crm.LoadAssignment()
 			if err != nil {
-				if errors.Is(err, crm.AssignmentNotFound) {
+				if errors.Is(err, crm.ErrAssignmentNotFound) {
 					a, err := shared.PromptForAssignment(client, c.Classroom.Id)
 					if err != nil {
 						crm.Fatal(err)

@@ -47,7 +47,7 @@ func NewCmdInit(f *cmdutil.Factory) *cobra.Command {
 
 			c, err := crm.LoadClassroom()
 			if err != nil {
-				if errors.Is(err, crm.ClassroomNotFound) {
+				if errors.Is(err, crm.ErrClassroomNotFound) {
 					c, err := shared.PromptForClassroom(client)
 					if err != nil {
 						crm.Fatal(fmt.Errorf("failed to get classroom: %v", err))
@@ -62,7 +62,7 @@ func NewCmdInit(f *cmdutil.Factory) *cobra.Command {
 				if err != nil {
 					crm.Fatal(err)
 				} else if !isClassroomFolder {
-					crm.Fatal(fmt.Errorf("Classroom folder exists in the folder hierarchy above, but the current folder is not a classroom folder. Change to the classroom folder."))
+					crm.Fatal(fmt.Errorf("classroom folder exists in the folder hierarchy above, but the current folder is not a classroom folder: Change to the classroom folder"))
 				} else {
 					cId = c.Classroom.Id
 				}

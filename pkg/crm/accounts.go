@@ -56,7 +56,7 @@ func ReadAccounts() ([]student, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to open accounts file: %v", err)
 	}
-	defer file.Close()
+	defer file.Close() //nolint:errcheck
 
 	// get the rows from the sheet
 	rows, err := file.GetRows(sheetName)

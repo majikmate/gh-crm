@@ -43,7 +43,7 @@ type crm struct {
 }
 
 var (
-	ClassroomNotFound = errors.New("No classroom found. Run `gh crm init` to create a classroom or change to a classroom folder.")
+	ErrClassroomNotFound = errors.New("no classroom found: run `gh crm init` to create a classroom or change to a classroom folder")
 )
 
 func IsClassroomFolder() (bool, error) {
@@ -79,7 +79,7 @@ func LoadClassroom() (*crm, error) {
 
 		parentDir := filepath.Dir(currentDir)
 		if parentDir == currentDir {
-			return nil, ClassroomNotFound
+			return nil, ErrClassroomNotFound
 		}
 
 		currentDir = parentDir
@@ -89,7 +89,7 @@ func LoadClassroom() (*crm, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to open %s file: %v", p, err)
 	}
-	defer file.Close()
+	defer file.Close() //nolint:errcheck
 
 	data, err := io.ReadAll(file)
 	if err != nil {
@@ -167,7 +167,7 @@ func (c *crm) Save(path string) error {
 	if err != nil {
 		return fmt.Errorf("failed to create %s file: %v", p, err)
 	}
-	defer file.Close()
+	defer file.Close() //nolint:errcheck
 
 	_, err = file.Write(j)
 	if err != nil {
