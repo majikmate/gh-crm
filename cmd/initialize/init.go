@@ -40,6 +40,11 @@ func NewCmdInit(f *cmdutil.Factory) *cobra.Command {
 				crm.Fatal(fmt.Errorf("failed to create gh client: %v", err))
 			}
 
+			as, err := crm.ReadAccounts()
+			if err != nil {
+				crm.Fatal(fmt.Errorf("failed to read accounts: %v", err))
+			}
+
 			c, err := crm.LoadClassroom()
 			if err != nil {
 				if errors.Is(err, crm.ClassroomNotFound) {
@@ -66,11 +71,6 @@ func NewCmdInit(f *cmdutil.Factory) *cobra.Command {
 			cls, err := classroom.GetClassroom(client, cId)
 			if err != nil {
 				crm.Fatal(fmt.Errorf("failed to get classroom: %v", err))
-			}
-
-			as, err := crm.ReadAccounts()
-			if err != nil {
-				crm.Fatal(fmt.Errorf("failed to read accounts: %v", err))
 			}
 
 			c = crm.NewClassroom()
