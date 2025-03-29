@@ -59,4 +59,8 @@ See [CODEOWNERS](./CODEOWNERS)
 
 This extension was heavily inspired by the great original GitHub Classroom CLI available here:
 
-[GitHub Classroom CLI](https://github.com/github/gh-classroom)
+- [GitHub Classroom CLI](https://github.com/github/gh-classroom)
+
+**License**
+- [Orignial License 1](./LICENSE-1.txt)
+- [Orignial License 2](./LICENSE-2.txt)
